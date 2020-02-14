@@ -2,68 +2,71 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/zalandoresearch/fashion-mnist.svg?style=flat&label=Star)](https://github.com/zalandoresearch/fashion-mnist/)
 [![Gitter](https://badges.gitter.im/zalandoresearch/fashion-mnist.svg)](https://gitter.im/fashion-mnist/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+[![Readme-EN](https://img.shields.io/badge/README-English-green.svg)](README.md)
 [![Readme-CN](https://img.shields.io/badge/README-中文-green.svg)](README.zh-CN.md)
-[![Readme-JA](https://img.shields.io/badge/README-日本語-green.svg)](README.ja.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Year-In-Review](https://img.shields.io/badge/%F0%9F%8E%82-Year%20in%20Review-orange.svg)](https://hanxiao.github.io/2018/09/28/Fashion-MNIST-Year-In-Review/)
+[![Year-In-Review](https://img.shields.io/badge/%F0%9F%8E%82-%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%81%AE%E5%B9%B4-orange.svg)](https://hanxiao.github.io/2018/09/28/Fashion-MNIST-Year-In-Review/)
 
-<details><summary>Table of Contents</summary><p>
+翻訳 : [(株)クラスキャット セールスインフォメーション](http://tensorflow.classcat.com/2017/08/28/tensorflow-fashion-mnist/)
 
-* [Why we made Fashion-MNIST](#why-we-made-fashion-mnist)
-* [Get the Data](#get-the-data)
-* [Usage](#usage)
-* [Benchmark](#benchmark)
-* [Visualization](#visualization)
-* [Contributing](#contributing)
-* [Contact](#contact)
-* [Citing Fashion-MNIST](#citing-fashion-mnist)
-* [License](#license)
+<details><summary>目次</summary><p>
+
+  * [何故でしょう？](#何故でしょう？)
+  * [データを取得する](#データを取得する)
+  * [使い方](#使い方)
+  * [ベンチマーク](#ベンチマーク)
+  * [可視化](#可視化)
+  * [貢献する](#貢献する)
+  * [接触](#接触)
+  * [引用Fashion-MNIST](#引用Fashion-MNIST)
+  * [License](#license)
 </p></details><p></p>
 
 
-`Fashion-MNIST` is a dataset of [Zalando](https://jobs.zalando.com/tech/)'s article images—consisting of a training set of 60,000 examples and a test set of 10,000 examples. Each example is a 28x28 grayscale image, associated with a label from 10 classes. We intend `Fashion-MNIST` to serve as a direct **drop-in replacement** for the original [MNIST dataset](http://yann.lecun.com/exdb/mnist/) for benchmarking machine learning algorithms. It shares the same image size and structure of training and testing splits.
+60,000 サンプルの訓練セットと 10,000 サンプルのテストセットから成る、[Zalando](https://jobs.zalando.com/tech/) の記事の画像のデータセットです。各サンプルは 28×28 グレースケール画像で、10 クラスからのラベルと関連付けられています。`Fashion-MNIST` は、機械学習アルゴリズムのベンチマークのためのオリジナルの MNIST データセット の 直接的な差し込み式の (= drop-in) 置き換え としてサーブすることを意図しています。
 
-Here's an example how the data looks (*each class takes three-rows*):
+ここにどのようにデータが見えるかのサンプルがあります (各クラスは３行取ります) :
 
 ![](doc/img/fashion-mnist-sprite.png)
 
 <img src="doc/img/embedding.gif" width="100%">
 
-## Why we made Fashion-MNIST
+## 何故でしょう？
+   
+オリジナルの [MNIST](http://yann.lecun.com/exdb/mnist/) データセットは沢山の手書き数字を含みます。AI/ML/データサイエンス・コミュニティの人々はこのデータセットを好みそして彼らのアルゴリズムを検証するためのベンチマークとしてそれを使用します。実際に、MNIST はしばしば試してみる最初のデータセットです。「もしそれが MNIST で動作しなければ、まったく動作しないだろう」と彼らは言いました。「そうですね～、もし MNIST で動作するとしても、他の上では依然として失敗するかもしれませんが。」
+   
+Fashion-MNIST は、機械学習アルゴリズムのベンチマークのためのオリジナルの MNIST データセットの直接的な差し込み式の (= drop-in) 置き換えとしてサーブすることを意図しています、というのはそれは同じ画像サイズでそして訓練及びテスト分割の構造を共有しているからです。
 
-The original [MNIST dataset](http://yann.lecun.com/exdb/mnist/) contains a lot of handwritten digits. Members of the AI/ML/Data Science community love this dataset and use it as a benchmark to validate their algorithms. In fact, MNIST is often the first dataset researchers try. *"If it doesn't work on MNIST, it **won't work** at all"*, they said. *"Well, if it does work on MNIST, it may still fail on others."* 
+### 真面目な機械学習研究者へ
 
-### To Serious Machine Learning Researchers
+真面目な話し、MNIST を置き換えることについて話しをしています。幾つかの良い理由がここにあります :
 
-Seriously, we are talking about replacing MNIST. Here are some good reasons:
+- **MNIST は簡単過ぎます。** [私たちの比較ベンチマーク](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/) と “[Most pairs of MNIST digits can be distinguished pretty well by just one pixel](https://gist.github.com/dgrtwo/aaef94ecc6a60cd50322c0054cc04478)” を確かめてください。
+- **MNIST は使用され過ぎています。** “[Ian Goodfellow wants people to move away from mnist.](https://twitter.com/goodfellow_ian/status/852591106655043584)”を確かめてください。
+- **MNIST はモダンな CV タスクを表現できません。** “[François Cholle: Ideas on MNIST do not transfer to real CV.](https://twitter.com/fchollet/status/852594987527045120)” を確かめてください。
 
-- **MNIST is too easy.** Convolutional nets can achieve 99.7% on MNIST. Classic machine learning algorithms can also achieve 97% easily. Check out [our side-by-side benchmark for Fashion-MNIST vs. MNIST](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/), and read "[Most pairs of MNIST digits can be distinguished pretty well by just one pixel](https://gist.github.com/dgrtwo/aaef94ecc6a60cd50322c0054cc04478)."
-- **MNIST is overused.** In [this April 2017 Twitter thread](https://twitter.com/goodfellow_ian/status/852591106655043584), Google Brain research scientist and deep learning expert Ian Goodfellow calls for people to move away from MNIST.
-- **MNIST can not represent modern CV tasks**, as noted in [this April 2017 Twitter thread](https://twitter.com/fchollet/status/852594987527045120), deep learning expert/Keras author François Chollet.
+## データを取得する
+[多くのMLライブラリ](#他の機械学習ライブラリを使用する)には既にFashion-MNISTデータ/ APIが含まれています。試してみてください！
 
-## Get the Data
+データセットをダウンロードするためには直接リンクを使用することができます。データはオリジナルの [MNIST](http://yann.lecun.com/exdb/mnist/) データと同じフォーマットでストアされています。
 
-[Many ML libraries](#loading-data-with-other-machine-learning-libraries) already include Fashion-MNIST data/API, give it a try!
-
-You can use direct links to download the dataset. The data is stored in the **same** format as the original [MNIST data](http://yann.lecun.com/exdb/mnist/).
-
-| Name  | Content | Examples | Size | Link | MD5 Checksum|
+| 名前  | 内容 | サンプル | サイズ | リンク | MD5チェックサム|
 | --- | --- |--- | --- |--- |--- |
-| `train-images-idx3-ubyte.gz`  | training set images  | 60,000|26 MBytes | [Download](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz)|`8d4fb7e6c68d591d4c3dfef9ec88bf0d`|
-| `train-labels-idx1-ubyte.gz`  | training set labels  |60,000|29 KBytes | [Download](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz)|`25c81989df183df01b3e8a0aad5dffbe`|
-| `t10k-images-idx3-ubyte.gz`  | test set images  | 10,000|4.3 MBytes | [Download](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz)|`bef4ecab320f06d8554ea6380940ec79`|
-| `t10k-labels-idx1-ubyte.gz`  | test set labels  | 10,000| 5.1 KBytes | [Download](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz)|`bb300cfdad3c16e7a12a480ee83cd310`|
+| `train-images-idx3-ubyte.gz`  | 訓練セット画像	  | 60,000|26 MBytes | [ダウンロード](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz)|`8d4fb7e6c68d591d4c3dfef9ec88bf0d`|
+| `train-labels-idx1-ubyte.gz`  | 訓練セット・ラベル |60,000|29 KBytes | [ダウンロード](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz)|`25c81989df183df01b3e8a0aad5dffbe`|
+| `t10k-images-idx3-ubyte.gz`  | テストセット画像  | 10,000|4.3 MBytes | [ダウンロード](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz)|`bef4ecab320f06d8554ea6380940ec79`|
+| `t10k-labels-idx1-ubyte.gz`  | テストセット・ラベル  | 10,000| 5.1 KBytes | [ダウンロード](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz)|`bb300cfdad3c16e7a12a480ee83cd310`|
 
-Alternatively, you can clone this GitHub repository; the dataset appears under `data/fashion`. This repo also contains some scripts for benchmark and visualization.
+あるいはこのレポジトリを clone することもできます、データセットは `data/fashion` の下です。この repo はベンチーマークと可視化のための幾つかのスクリプトを含みます。
    
 ```bash
 git clone git@github.com:zalandoresearch/fashion-mnist.git
 ```
 
-### Labels
-Each training and test example is assigned to one of the following labels:
+### ラベル
+各訓練とテスト・サンプルは以下のラベル群の一つに割り当てられています :
 
-| Label | Description |
+| ラベル | 記述 |
 | --- | --- |
 | 0 | T-shirt/top |
 | 1 | Trouser |
@@ -76,19 +79,20 @@ Each training and test example is assigned to one of the following labels:
 | 8 | Bag |
 | 9 | Ankle boot |
 
-## Usage
+## 使い方
 
-### Loading data with Python (requires [NumPy](http://www.numpy.org/))
+### Python ([NumPy](http://www.numpy.org/)が必要)でデータをロードする
 
-Use `utils/mnist_reader` in this repo:
+この repo の `utils/mnist_reader` を使用する :
 ```python
 import mnist_reader
 X_train, y_train = mnist_reader.load_mnist('data/fashion', kind='train')
 X_test, y_test = mnist_reader.load_mnist('data/fashion', kind='t10k')
 ```
 
-### Loading data with Tensorflow
-Make sure you have [downloaded the data](#get-the-data) and placed it in `data/fashion`. Otherwise, *Tensorflow will download and use the original MNIST.*
+### でデータをロードする
+
+[私たちのデータセットをダウンロードしてください](#データを取得する)ことを確認し、それを `data/fashion`の下に置きます。それ以外の場合、* Tensorflowは自動的に元のMNISTをダウンロードして使用します。 *
 
 ```python
 from tensorflow.examples.tutorials.mnist import input_data
@@ -97,32 +101,29 @@ data = input_data.read_data_sets('data/fashion')
 data.train.next_batch(BATCH_SIZE)
 ```
 
-Note, Tensorflow supports passing in a source url to the `read_data_sets`. You may use: 
-```python
-data = input_data.read_data_sets('data/fashion', source_url='http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/')
-```
+Fashion-MNISTを訓練するための高レベルのAPIである`tf.keras`の使用に関する公式のTensorflow[チュートリアルがここにあります](https://www.tensorflow.org/tutorials/keras/basic_classification)。
 
-Also, an official Tensorflow tutorial of using `tf.keras`, a high-level API to train Fashion-MNIST [can be found here](https://www.tensorflow.org/tutorials/keras/basic_classification).
+### 他の機械学習ライブラリを使用する
 
-### Loading data with other machine learning libraries 
-To date, the following libraries have included `Fashion-MNIST` as a built-in dataset. Therefore, you don't need to download `Fashion-MNIST` by yourself. Just follow their API and you are ready to go.
+今日まで、以下のライブラリは、組み込みデータセットとして `Fashion-MNIST`を含んでいます。 したがって、自分で`Fashion-MNIST`をダウンロードする必要はありません。 そのAPIに従うだけで、あなたは準備が整いました。
 
 - [Apache MXNet Gluon](https://mxnet.incubator.apache.org/api/python/gluon/data.html)
 - [deeplearn.js](https://deeplearnjs.org/demos/model-builder/)
 - [Kaggle](https://www.kaggle.com/zalando-research/fashionmnist)
-- [Pytorch](https://pytorch.org/docs/master/torchvision/datasets.html#fashion-mnist)
+- [Pytorch](http://pytorch.org/docs/master/torchvision/datasets.html#fashion-mnist)
 - [Keras](https://keras.io/datasets/#fashion-mnist-database-of-fashion-articles)
 - [Edward](http://edwardlib.org/api/observations/fashion_mnist)
-- [Tensorflow](https://www.tensorflow.org/api_docs/python/tf/keras/datasets/fashion_mnist)
+- [Tensorflow](https://www.tensorflow.org/versions/r1.5/api_docs/python/tf/keras/datasets/fashion_mnist)
 - [Torch](https://github.com/mingloo/fashion-mnist)
 - [JuliaML](https://github.com/JuliaML/MLDatasets.jl)
-- [Chainer](https://docs.chainer.org/en/stable/reference/generated/chainer.datasets.get_fashion_mnist.html)
+- [Chainer (latest)](https://docs.chainer.org/en/latest/reference/generated/chainer.datasets.get_fashion_mnist.html?highlight=fashion-mnist)
 
-You are welcome to make pull requests to other open-source machine learning packages, improving their support to `Fashion-MNIST` dataset.
+ようこそ私たちに参加して、各機械学習ライブラリ用の`Fashion-MNIST`のサポートを追加してください。
 
-### Loading data with other languages
 
-As one of the Machine Learning community's most popular datasets, MNIST has inspired people to implement loaders in many different languages. You can use these loaders with the `Fashion-MNIST` dataset as well. (Note: may require decompressing first.) To date, we haven't yet tested all of these loaders with Fashion-MNIST.
+### 他の言語でデータをロードする
+
+機械学習コミュニティでもっとも人気のあるデータセットの一つですので、人々は多くの言語で MNIST loader を実装してきています。それらは `Fashion-MNIST` データセットをロードするためにも使用できるでしょう (最初に decompress する必要があるかもしれません)。それらは私たちによってテストはされていないことには注意してください。
 
 - [C](https://stackoverflow.com/a/10409376)
 - [C++](https://github.com/wichtounet/mnist)
@@ -138,18 +139,16 @@ As one of the Machine Learning community's most popular datasets, MNIST has insp
 - [Ruby](https://github.com/gbuesing/mnist-ruby-test/blob/master/train/mnist_loader.rb)
 
 
-## Benchmark
-We built an automatic benchmarking system based on `scikit-learn` that covers 129 classifiers (but no deep learning) with different parameters. [Find the results here](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/).
+## ベンチマーク
+scikit-learn ベースの自動ベンチマーキング・システムを構築しました、これは異なるパラメータの 129 の (深層学習ではない) 分類器をカバーします。 [結果はここで見つかります。](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/).
 
 <img src="doc/img/benchmark.gif" width="100%">
 
-You can reproduce the results by running `benchmark/runner.py`. We recommend building and deploying [this Dockerfile](Dockerfile). 
+結果は benchmark/runner.py を実行することで再現できます。推奨方法はこの docker コンテナをビルドして deploy することです (訳注 : リンク欠落)。[this Dockerfile](Dockerfile). 
 
-You are welcome to submit your benchmark; simply create a new issue and we'll list your results here. Before doing that, please make sure it does not already appear [in this list](http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/). Visit our [contributor guidelines](https://github.com/zalandoresearch/fashion-mnist#contributing) for additional details.
+貴方のベンチマークを submit することを歓迎します。新しい issue を作成してください、貴方の結果はここでリストされます。詳細は [contributor guidelines](https://github.com/zalandoresearch/fashion-mnist#contributing) セクションを確認してください。ベンチマークを submit する前に、このリストにリストされていなことを必ず確認してください。
 
-The table below collects the submitted benchmarks. Note that **we haven't yet tested these results**. You are welcome to validate the results using the code provided by the submitter. Test accuracy may differ due to the number of epoch, batch size, etc. To correct this table, please create a new issue.
-
-| Classifier | Preprocessing | Fashion test accuracy | MNIST test accuracy | Submitter| Code |
+| 分類器 | 前処理	 | Fashion テスト精度| MNIST テスト精度 | Submitter| コード |
 | --- | --- | --- | --- | --- |--- |
 |2 Conv+pooling | None | 0.876 | - | [Kashif Rasul](https://twitter.com/krasul) | [:link:](https://gist.github.com/kashif/76792939dd6f473b7404474989cb62a8) |
 |2 Conv+pooling | None | 0.916| - |[Tensorflow's doc](https://www.tensorflow.org/tutorials/layers) | [:link:](/benchmark/convnet.py)|
@@ -177,11 +176,11 @@ The table below collects the submitted benchmarks. Note that **we haven't yet te
 |AlexNet with Triplet loss| None | 0.899 | - | [@Cenk Bircanoğlu](https://github.com/cenkbircanoglu) | [:link:](https://github.com/cenkbircanoglu/openface/tree/master/fashion_mnist)|
 |SqueezeNet with cyclical learning rate 200 epochs| None| 0.900| - | [@snakers4](https://github.com/snakers4) | [:link:](https://github.com/zalandoresearch/fashion-mnist/files/1263340/squeeze_net_mnist.zip)|
 |Dual path network with wide resnet 28-10|standard preprocessing (mean/std subtraction/division) and augmentation (random crops/horizontal flips) |0.957|-|[@Queequeg](https://github.com/Queequeg92)|[:link:](https://github.com/Queequeg92/DualPathNet)|
-|MLP 256-128-100| None | 0.8833| - | [@heitorrapela](https://github.com/heitorrapela)| [:link:](https://github.com/heitorrapela/fashion-mnist-mlp)| 
+|MLP 256-128-100| None | 0.8833| - | [@heitorrapela](https://github.com/heitorrapela)| [:link:](https://github.com/heitorrapela/fashion-mnist-mlp)|
 |VGG16 26M parameters | None | 0.935| - | [@QuantumLiu](https://github.com/QuantumLiu)|[:link:](https://github.com/QuantumLiu/fashion-mnist-demo-by-Keras) [:link:](https://zhuanlan.zhihu.com/p/28968219)|
 |WRN-28-10| standard preprocessing (mean/std subtraction/division) and augmentation (random crops/horizontal flips) | 0.959 | -| [@zhunzhong07](https://github.com/zhunzhong07)|[:link:](https://github.com/zhunzhong07/Random-Erasing)|
 |WRN-28-10 + Random Erasing| standard preprocessing (mean/std subtraction/division) and augmentation (random crops/horizontal flips) | 0.963 | -| [@zhunzhong07](https://github.com/zhunzhong07)|[:link:](https://github.com/zhunzhong07/Random-Erasing)|
-|Human Performance| Crowd-sourced evaluation of human (with no fashion expertise) performance. 1000 randomly sampled test images, 3 labels per image, majority labelling. | 0.835 | - | Leo  | - |
+|Human Performance| Crowd-sourced evaluation of human (with no fashion expertise) performance. 1000 randomly sampled test images, 3 labels per image, majority labelling. | 0.835 | - | Leo  | - 
 |Capsule Network 8M parameters| Normalization and shift at most 2 pixel and horizontal flip | 0.936 | - | [@XifengGuo](https://github.com/XifengGuo)  | [:link:](https://github.com/XifengGuo/CapsNet-Fashion-MNIST)|
 |HOG+SVM| HOG | 0.926 | - | [@subalde](https://github.com/subalde) | [:link:](https://github.com/subalde/fashion-mnist)|
 |XgBoost| scaling the pixel values to mean=0.0 and var=1.0| 0.898| 0.958| [@anktplwl91](https://github.com/anktplwl91)| [:link:](https://github.com/anktplwl91/fashion_mnist.git)|
@@ -190,23 +189,25 @@ The table below collects the submitted benchmarks. Note that **we haven't yet te
 |Google AutoML|24 compute hours (higher quality)| 0.939|-| [@Sebastian Heinz](https://github.com/sebastianheinz) |[:link:](https://www.statworx.com/de/blog/a-performance-benchmark-of-google-automl-vision-using-fashion-mnist/)|
 
 
-### Other Explorations of Fashion-MNIST
+### 他の探求
 
 #### [Fashion-MNIST: Year in Review](https://hanxiao.github.io/2018/09/28/Fashion-MNIST-Year-In-Review/)
-#### [Fashion-MNIST on Google Scholar](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=fashion-mnist&btnG=&oq=fas) 
+#### [Fashion-MNIST on Google Scholar](https://scholar.google.de/scholar?hl=en&as_sdt=0%2C5&q=fashion-mnist&btnG=&oq=fas) 
 
 #### Generative adversarial networks (GANs) 
 - [Tensorflow implementation of various GANs and VAEs.](https://github.com/hwalsuklee/tensorflow-generative-model-collections) (**Recommend to read!** Note how various GANs generate different results on Fashion-MNIST, which can not be easily observed on the original MNIST.)
 - [Make a ghost wardrobe using DCGAN](https://twitter.com/spaceLenny/status/901488938023403520)
 - [fashion-mnist的gan玩具](http://kexue.fm/archives/4540/)
 - [CGAN output after 5000 steps](https://github.com/a7b23/Conditional-GAN-using-tensorflow-slim)
+- [live demo of Generative Adversarial Network model with deeplearn.js](http://cognitivechaos.com/playground/fashion-gan/)
 - [GAN Playground - Explore Generative Adversarial Nets in your Browser](https://reiinakano.github.io/gan-playground/)
 
-#### Clustering
+#### クラスタリング
 - [Xifeng Guo's implementation](https://github.com/XifengGuo/DEC-keras) of [Unsupervised Deep Embedding for Clustering Analysis (DEC)](http://proceedings.mlr.press/v48/xieb16.pdf)
 - [Leland McInnes's](https://github.com/lmcinnes) [Uniform Manifold Approximation and Projection (UMAP)](https://github.com/lmcinnes/umap)
 
-#### Video Tutorial
+
+#### ビデオチュートリアル
 *Machine Learning Meets Fashion* by Yufeng G @ Google Cloud
 
 [![Machine Learning Meets Fashion](doc/img/ae143b2d.png)](https://youtu.be/RJudqel8DVA)
@@ -225,26 +226,25 @@ Apache MXNet으로 배워보는 딥러닝(Deep Learning) - 김무현 (AWS 솔루
 
 
 
-## Visualization
+## 可視化
 
-### t-SNE on Fashion-MNIST (left) and original MNIST (right) 
+### t-SNE on Fashion-MNIST (左) とオリジナルの MNIST (右)
 <img src="doc/img/34d72c08.png" width="50%"><img src="doc/img/01e0c4be.png" width="50%">
 
-### PCA on Fashion-MNIST (left) and original MNIST (right) 
+### PCA on Fashion-MNIST (左) とオリジナルの MNIST (右)
 <img src="doc/img/f04ba662.png" width="50%"><img src="doc/img/4433f0e1.png" width="50%">
 
-### [UMAP](https://github.com/lmcinnes/umap) on Fashion-MNIST (left) and original MNIST (right) 
+### [UMAP](https://github.com/lmcinnes/umap) Fashion-MNIST (左) とオリジナルの MNIST (右) 
 <img src="doc/img/umap_example_fashion_mnist1.png" width="50%"><img src="doc/img/umap_example_mnist1.png" width="50%">
 
-
-## Contributing
+## 貢献する
 
 Thanks for your interest in contributing! There are many ways to get involved; start with our [contributor guidelines](/CONTRIBUTING.md) and then check these [open issues](https://github.com/zalandoresearch/fashion-mnist/issues) for specific tasks.
 
-## Contact
+## 接触
 To discuss the dataset, please use [![Gitter](https://badges.gitter.im/zalandoresearch/fashion-mnist.svg)](https://gitter.im/fashion-mnist/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link).
 
-## Citing Fashion-MNIST
+## 引用Fashion-MNIST
 If you use Fashion-MNIST in a scientific publication, we would appreciate references to the following paper:
 
 **Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms. Han Xiao, Kashif Rasul, Roland Vollgraf. [arXiv:1708.07747](http://arxiv.org/abs/1708.07747)**
@@ -262,7 +262,8 @@ Biblatex entry:
 }
 ```
 
-[Who is citing Fashion-MNIST?](https://scholar.google.com/scholar?scisbd=2&q=%22fashion-mnist%22&hl=en&as_sdt=0,5) 
+[誰がFashion-MNISTを引用していますか？](https://scholar.google.com/scholar?scisbd=2&q=%22fashion-mnist%22&hl=en&as_sdt=0,5) 
+
 
 ## License
 
